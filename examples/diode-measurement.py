@@ -48,7 +48,7 @@ Vmeas = []
 Imeas = []
 
 
-# Perform measurments
+# Perform measurements
 
 for vset in v_points:
     smu.set_drive_voltage( vset )
