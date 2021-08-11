@@ -43,7 +43,7 @@ vext = smu.measure_ext()
 # Set drive voltage (eg. to 1V)
 smu.set_drive_voltage( 1.0 )
 
-# Set drive current (eg. to 1mA )
+# Set drive current (eg. to 1mA)
 smu.set_drive_current( 1e-3 )
 ```
 
