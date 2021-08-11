@@ -62,7 +62,7 @@ smu.write_float( libStrix.PARAM_COMPLIANCE_VOLTAGE, 20.0 ) # set compliance volt
 # Set compliance current
 smu.write_float( libStrix.PARAM_COMPLIANCE_CURRENT, 10e-3 ) # set compliance current to 10mA
 
-# Set 4-write mode on/off
+# Set 4-wire mode on/off
 smu.write( libStrix.PARAM_4WIRE_MODE, libStrix.ENABLE_4WIRE_MODE )
 smu.write( libStrix.PARAM_4WIRE_MODE, libStrix.DISABLE_4WIRE_MODE )
 
