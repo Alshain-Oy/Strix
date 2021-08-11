@@ -1,6 +1,9 @@
 # Strix
-Strix SMU scripts &amp; libraries
+Alshain Strix SMU Scripts & user guide
 
+- [Wiki](https://github.com/Alshain-Oy/Strix/wiki) for user guide & specifications.
+- [Examples](https://github.com/Alshain-Oy/Strix/tree/main/examples) folder for measurement scripts.
+ 
 
 ## Quickstart
 
@@ -19,4 +22,24 @@ smu = libStrix.Strix( com, 1 )
 
 # Measure both voltage and current
 voltage, current = smu.measure()
+```
+
+## Snippets
+
+### Basic usage
+```python
+# Measure both voltage and current
+voltage, current = smu.measure()
+
+# Measure voltage
+voltage = smu.measure_voltage()
+
+# Measure current
+current = smu.measure_current()
+
+# Set drive voltage (eg. to 1V)
+smu.set_drive_voltage( 1.0 )
+
+# Set drive current (eg to 1mA )
+smu.set_drive_current( 1e-3 )
 ```
