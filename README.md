@@ -97,6 +97,18 @@ smu.write( libStrix.PARAM_EXT_VOLTAGE_GAIN, 1 )
 # 20sps (default) has integrated 50/60Hz filter so it is advisable to use that if possible
 smu.write( libStrix.PARAM_ADC_SAMPLERATE, 20 ) 
 
+# Set internal temperature stabilization on/off
+# Strix has heaters to keep its internals at a constant temperature, heaters are turned off during measurements 
+# to reduce any noise introduced to measurement, but heaters can be turned off also programmatically
+smu.write( libStrix.PARAM_THERMAL_MODE, libStrix.MODE_HEATER_OFF )
+smu.write( libStrix.PARAM_THERMAL_MODE, libStrix.MODE_HEATER_AUTO )
+
+# Set powerline cycle sync mode ie. synchronize measurements to start at a constant powerline phase
+# Valid values:
+# MODE_PLC_SYNC_NONE
+# MODE_PLC_SYNC_50HZ (default)
+# MODE_PLC_SYNC_60HZ
+smu.write( libStrix.PARAM_PLC_SYNC_MODE, libStrix.MODE_PLC_SYNC_50HZ ) 
 
 ```
 
