@@ -98,8 +98,9 @@ smu.write( libStrix.PARAM_EXT_VOLTAGE_GAIN, 1 )
 smu.write( libStrix.PARAM_ADC_SAMPLERATE, 20 ) 
 
 # Set internal temperature stabilization on/off
-# Strix has heaters to keep its internals at a constant temperature, heaters are turned off during measurements 
-# to reduce any noise introduced to measurement, but heaters can be turned off also programmatically
+# Strix has heaters to keep its internals at a constant temperature, heaters are turned off 
+# during measurements to reduce any noise introduced to measurement, but they can be also
+# turned off programmatically.
 smu.write( libStrix.PARAM_THERMAL_MODE, libStrix.MODE_HEATER_OFF )
 smu.write( libStrix.PARAM_THERMAL_MODE, libStrix.MODE_HEATER_AUTO )
 
