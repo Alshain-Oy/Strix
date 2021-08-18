@@ -3,7 +3,7 @@ Alshain Strix SMU Scripts & user guide
 
 - [Wiki](https://github.com/Alshain-Oy/Strix/wiki) for user guide & specifications.
 - [Examples](https://github.com/Alshain-Oy/Strix/tree/main/examples) folder for measurement scripts.
- 
+- [Labview library](https://github.com/Alshain-Oy/Strix/tree/main/Labview) is now also available.
 
 ## Quickstart
 
