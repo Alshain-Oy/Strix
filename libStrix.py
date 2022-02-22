@@ -37,7 +37,7 @@ OP_ASYNC_DRIVE_VOLTAGE =	(0x33)
 OP_ASYNC_DRIVE_CURRENT =	(0x34)
 OP_ASYNC_START_SWEEP =		(0x35)
 
-
+OP_SET_OUTPUT = 			(0x40)
 
 
 ### STRIX
@@ -236,6 +236,7 @@ PARAM_TEMPCO_VEXT_64X_GAIN =        (132)
 PARAM_TEMPCO_VEXT_64X_T0 =          (133)
 
 
+PARAM_COMPLIANCE_MODE =     (134)
 PARAM_ASYNC_SWEEP_DWELL =   (135)
 PARAM_SERIAL_NUMBER =       (136)
 PARAM_FIRMWARE_VER =		    (137)
@@ -245,6 +246,7 @@ PARAM_UPTIME =			        (138)
 DATA_PTR =             (139)
 DATA_START =           (140)
 
+PARAM_OUTPUT_STATE = (699)
 
 
 
@@ -312,6 +314,11 @@ ASYNC_CHANNEL_CURRENT =			(1)
 ASYNC_CHANNEL_EXT =				(2)
 
 
+MODE_COMPLIANCE_LIMIT =   (0)
+MODE_COMPLIANCE_DISABLE = (1)
+
+OUTPUT_DISABLED =         (0)
+OUTPUT_ENABLED =          (1)
 
 
 
@@ -403,7 +410,14 @@ class Strix( object ):
 		self.address = address
 		self.data = MemoryMap( self )
 	
+
+	def _clear_buffer( self ):
+		if self.com.in_waiting > 0:
+			self.com.read( self.com.in_waiting )
+
 	def write( self, key, value ):
+		self._clear_buffer()
+
 		self.com.write( gen_write_msg( self.address, int(key), int(value) ) )
 		response = self.com.read( 10 )
 		addr, op = decode_header( response )
@@ -411,6 +425,8 @@ class Strix( object ):
 			raise IndexError
 
 	def write_float( self, key, value ):
+		self._clear_buffer()
+		
 		self.com.write( gen_write_float_msg( self.address, int(key), value ) )
 		response = self.com.read( 10 )
 		addr, op = decode_header( response )
@@ -420,6 +436,8 @@ class Strix( object ):
 
 
 	def read( self, key ):
+		self._clear_buffer()
+		
 		self.com.write( gen_read_msg( self.address, int( key ) ) )
 		response = self.com.read( 10 )
 		#print(repr(response))
@@ -431,6 +449,8 @@ class Strix( object ):
 		return value
 
 	def read_float( self, key ):
+		self._clear_buffer()
+		
 		self.com.write( gen_read_msg( self.address, int( key ) ) )
 		response = self.com.read( 10 )
 		#print(repr(response))
@@ -442,12 +462,16 @@ class Strix( object ):
 		return value
 
 	def mem_write( self, addr, value ):
+		self._clear_buffer()
+		
 		self.com.write( gen_action_msg_mem( self.address, OP_I2C_MEM_W, addr, value ) )
 		response = self.com.read( 10 )
 		key, value = decode_action( response )
 		return value 
 	
 	def mem_read( self, addr ):
+		self._clear_buffer()
+		
 		self.com.write( gen_action_msg( self.address, OP_I2C_MEM_R, addr, 0 ) )
 		response = self.com.read( 10 )
 		key, value = decode_action_mem( response )
@@ -455,24 +479,32 @@ class Strix( object ):
 
 
 	def mem_write_float( self, addr, value ):
+		self._clear_buffer()
+		
 		self.com.write( gen_action_msg_mem_float( self.address, OP_I2C_MEM_W, addr, value ) )
 		response = self.com.read( 10 )
 		key, value = decode_action( response )
 		return value 
 	
 	def mem_read_float( self, addr ):
+		self._clear_buffer()
+		
 		self.com.write( gen_action_msg( self.address, OP_I2C_MEM_R, addr, 0 ) )
 		response = self.com.read( 10 )
 		key, value = decode_action_mem_float( response )
 		return value 
 
 	def set_drive_voltage( self, voltage ):
+		self._clear_buffer()
+		
 		self.com.write( gen_action_msg_float( self.address, OP_DRIVE_VOLTAGE, 0, voltage ) )
 		response = self.com.read( 10 )
 		key, value = decode_action( response )
 		return value 
 
 	def set_drive_current( self, current ):
+		self._clear_buffer()
+		
 		self.com.write( gen_action_msg_float( self.address, OP_DRIVE_CURRENT, 0, current ) )
 		response = self.com.read( 10 )
 		key, value = decode_action( response )
@@ -480,19 +512,26 @@ class Strix( object ):
 
 
 	def measure( self ):
+		self._clear_buffer()
+		
 		self.com.write( gen_action_msg_float( self.address, OP_MEASURE, 0, 0 ) )
 		response = self.com.read( 10 )
 		voltage, current = decode_measure( response )
 		return voltage, current
 
 	def get_temperature( self ):
+		self._clear_buffer()
+		
 		self.com.write( gen_action_msg_float( self.address, OP_GET_TEMPERATURE, 0, 0 ) )
 		response = self.com.read( 10 )
 		key, value = decode_action( response )
-		temp = value * 0.0078125
-		return temp
+		temp_driver = value * 0.0078125
+		temp_adc = key * 0.03125
+		return temp_driver, temp_adc
 	
 	def get_raw_voltages( self ):
+		self._clear_buffer()
+		
 		self.com.write( gen_action_msg_float( self.address, OP_RAW_VOLTAGES, 0, 0 ) )
 		response = self.com.read( 10 )
 		voltage, current = decode_measure( response )
@@ -500,18 +539,24 @@ class Strix( object ):
 
 
 	def measure_voltage( self ):
+		self._clear_buffer()
+		
 		self.com.write( gen_action_msg_float( self.address, OP_MEASURE_VOLTAGE, 0, 0 ) )
 		response = self.com.read( 10 )
 		voltage, current = decode_measure( response )
 		return voltage
 	
 	def measure_current( self ):
+		self._clear_buffer()
+		
 		self.com.write( gen_action_msg_float( self.address, OP_MEASURE_CURRENT, 0, 0 ) )
 		response = self.com.read( 10 )
 		voltage, current = decode_measure( response )
 		return current
 
 	def _read_raw_adc( self, cfg ):
+		self._clear_buffer()
+		
 		self.com.write( gen_action_msg( self.address, OP_RAW_ADC, cfg, 0 ) )
 		response = self.com.read( 10 )
 		key, value = decode_action( response )
@@ -519,24 +564,32 @@ class Strix( object ):
 
 
 	def measure_ext( self ):
+		self._clear_buffer()
+		
 		self.com.write( gen_action_msg_float( self.address, OP_MEASURE_EXT, 0, 0 ) )
 		response = self.com.read( 10 )
 		voltage, current = decode_measure( response )
 		return voltage
 
 	def async_set_drive_voltage( self, voltage ):
+		self._clear_buffer()
+		
 		self.com.write( gen_action_msg_float( self.address, OP_ASYNC_DRIVE_VOLTAGE, 0, voltage ) )
 		response = self.com.read( 10 )
 		key, value = decode_action( response )
 		return value 
 
 	def async_set_drive_current( self, current ):
+		self._clear_buffer()
+		
 		self.com.write( gen_action_msg_float( self.address, OP_ASYNC_DRIVE_CURRENT, 0, current ) )
 		response = self.com.read( 10 )
 		key, value = decode_action( response )
 		return value 
 
 	def async_set_drive_current( self, current ):
+		self._clear_buffer()
+		
 		self.com.write( gen_action_msg_float( self.address, OP_ASYNC_DRIVE_CURRENT, 0, current ) )
 		response = self.com.read( 10 )
 		key, value = decode_action( response )
@@ -549,21 +602,41 @@ class Strix( object ):
 
 
 	def async_measure_voltage( self ):
+		self._clear_buffer()
+		
 		self.com.write( gen_action_msg_float( self.address, OP_ASYNC_MEASURE_VOLTAGE, 0, 0 ) )
 		response = self.com.read( 10 )
 		voltage, current = decode_measure( response )
 		
 	def async_measure_current( self ):
+		self._clear_buffer()
+		
 		self.com.write( gen_action_msg_float( self.address, OP_ASYNC_MEASURE_CURRENT, 0, 0 ) )
 		response = self.com.read( 10 )
 		voltage, current = decode_measure( response )
 
 	def async_measure_ext( self ):
+		self._clear_buffer()
+		
 		self.com.write( gen_action_msg_float( self.address, OP_ASYNC_MEASURE_EXT, 0, 0 ) )
 		response = self.com.read( 10 )
 		voltage, current = decode_measure( response )
 
 	def async_start_sweep( self, read_channel, write_channel  ):
+		self._clear_buffer()
+		
 		self.com.write( gen_action_msg_float( self.address, OP_ASYNC_START_SWEEP, read_channel, write_channel ) )
 		response = self.com.read( 10 )
 		voltage, current = decode_measure( response )
+
+	def set_output( self, output_state ):
+		self._clear_buffer()
+		
+		if output_state:
+			self.com.write( gen_action_msg( self.address, OP_SET_OUTPUT, 1, 1 ) )
+		else:
+			self.com.write( gen_action_msg( self.address, OP_SET_OUTPUT, 0, 0 ) )
+			
+		response = self.com.read( 10 )
+		key, value = decode_action( response )
+	
