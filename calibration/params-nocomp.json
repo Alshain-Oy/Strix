@@ -1,0 +1,93 @@
+{
+  "div10": [
+    0.0,
+    1.0,
+    0.0,
+    0.0
+  ],
+  "1x": [
+    0.0,
+    1.0,
+    0.0,
+    0.0
+  ],
+  "10x": [
+    0.0,
+    1.0,
+    0.0,
+    0.0
+  ],
+
+  "vmeas_1x": [
+    0.0,
+    1.0,
+    0.0,
+    0.0
+  ],
+  "vmeas_8x": [
+    0.0,
+    1.0,
+    0.0,
+    0.0
+  ],
+  "vmeas_64x": [
+    0.0,
+    1.0,
+    0.0,
+    0.0
+  ],
+
+ "imeas_1": [
+    0,
+    -1,
+    0,
+    0
+  ],
+ "imeas_2": [
+    0,
+    -1,
+    0,
+    0
+  ],
+ "imeas_3": [
+    0,
+    -1,
+    0,
+    0
+  ],
+ "imeas_4": [
+    0,
+    -1,
+    0,
+    0
+  ],
+
+ "idrive_1": [0,1,0,0],
+ "idrive_2": [0,1,0,0],
+ "idrive_3": [0,1,0,0],
+ "idrive_4": [0,1,0,0],
+ "tempco_vdrive_div10": [0,0],
+ "tempco_vdrive_1x": [0,0],
+ "tempco_vdrive_10x": [0,0],
+ "tempco_vmeas_1x": [0,0],
+ "tempco_vmeas_8x": [0,0],
+ "tempco_vmeas_64x": [0,0],
+ "tempco_imeas_1": [0,0],
+ "tempco_imeas_2": [0,0],
+ "tempco_imeas_3": [0,0],
+ "tempco_imeas_4": [0,0],
+ "tempco_idrive_1": [0,0],
+ "tempco_idrive_2": [0,0],
+ "tempco_idrive_3": [0,0],
+ "tempco_idrive_4": [0,0],
+ "vext_1x": [0,1,0,0],
+ "vext_8x": [0,1,0,0],
+ "vext_64x": [0,1,0,0],
+ "tempco_vext_1x": [0,0],
+ "tempco_vext_8x": [0,0],
+ "tempco_vext_64x": [0,0],
+ "4w_vmeas": [0,1,0,0],
+ "4w_vdrive": [0,1,0,0],
+ "tempco_4w_vmeas": [0,0],
+ "tempco_4w_vdrive": [0,0]
+}
