@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-from audioop import reverse
 import sys
 import serial
 import time
