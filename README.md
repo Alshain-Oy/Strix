@@ -82,7 +82,7 @@ smu.write( libStrix.PARAM_ADC_VOLTAGE_GAIN, 1 )
 # * 1 -> ±10mA
 # * 2 -> ±100µA
 # * 3 -> ±1µA
-# * 4 -> ±100nA
+# * 4 -> ±10nA
 smu.write( libStrix.PARAM_LARGE_CURRENT_GAIN, 1 ) 
 
 # Set ext voltage input fixed range
