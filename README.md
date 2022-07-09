@@ -87,9 +87,9 @@ smu.write( libStrix.PARAM_LARGE_CURRENT_GAIN, 1 )
 
 # Set ext voltage input fixed range
 # valid gains are 1, 8, 64
-# * 1  -> ±1V 
-# * 8  -> ±125mV 
-# * 64 -> ±15mV 
+# * 1  -> ±2.5V 
+# * 8  -> ±300mV 
+# * 64 -> ±35mV 
 smu.write( libStrix.PARAM_EXT_VOLTAGE_GAIN, 1 ) 
 
 # Set adc samplerate
