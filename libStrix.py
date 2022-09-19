@@ -38,6 +38,7 @@ OP_ASYNC_DRIVE_CURRENT =	(0x34)
 OP_ASYNC_START_SWEEP =		(0x35)
 
 OP_SET_OUTPUT = 			(0x40)
+OP_SET_LOW_CURRENT_MODE = 	(0x41)
 
 
 ### STRIX
@@ -315,11 +316,13 @@ ASYNC_CHANNEL_EXT =				(2)
 
 
 MODE_COMPLIANCE_LIMIT =   (0)
-MODE_COMPLIANCE_DISABLE = (1)
+MODE_COMPLIANCE_DISABLE_OUTPUT = (1)
 
 OUTPUT_DISABLED =         (0)
 OUTPUT_ENABLED =          (1)
 
+LOW_CURRENT_MODE_OFF =   (0)
+LOW_CURRENT_MODE_ON  =   (1)
 
 
 
@@ -629,7 +632,7 @@ class Strix( object ):
 		response = self.com.read( 10 )
 		voltage, current = decode_measure( response )
 
-	def set_output( self, output_state ):
+	def enable_output( self, output_state ):
 		self._clear_buffer()
 		
 		if output_state:
@@ -640,3 +643,13 @@ class Strix( object ):
 		response = self.com.read( 10 )
 		key, value = decode_action( response )
 	
+	def set_low_current_mode( self, mode ):
+		self._clear_buffer()
+		
+		if mode:
+			self.com.write( gen_action_msg( self.address, OP_SET_LOW_CURRENT_MODE, 1, 1 ) )
+		else:
+			self.com.write( gen_action_msg( self.address, OP_SET_LOW_CURRENT_MODE, 0, 0 ) )
+			
+		response = self.com.read( 10 )
+		key, value = decode_action( response )
