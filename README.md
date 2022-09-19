@@ -40,6 +40,10 @@ current = smu.measure_current()
 # Measure ext voltage
 vext = smu.measure_ext()
 
+# Enable & disable output
+smu.enable_output( True )
+smu.enable_output( False )
+
 # Set drive voltage (eg. to 1V)
 smu.set_drive_voltage( 1.0 )
 
@@ -79,7 +83,7 @@ smu.write( libStrix.PARAM_ADC_VOLTAGE_GAIN, 1 )
 
 # Set current input fixed range
 # valid gains are 1, 2, 3, 4
-# * 1 -> ±10mA
+# * 1 -> ±20mA
 # * 2 -> ±100µA
 # * 3 -> ±1µA
 # * 4 -> ±10nA
