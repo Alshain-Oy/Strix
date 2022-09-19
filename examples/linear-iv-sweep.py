@@ -23,6 +23,9 @@ dV = 0.1
 N = int( abs(v_start - v_stop) / dV ) + 1
 
 # Perform measurements 
+smu.enable_output( True )
+
+
 for i in range( N + 1 ):
     
     q = i / N
@@ -35,8 +38,6 @@ for i in range( N + 1 ):
 
     print( v_meas, i_meas )
 
-
-
-smu.set_drive_voltage( 0 )
+smu.enable_output( False )
     
 com.close()

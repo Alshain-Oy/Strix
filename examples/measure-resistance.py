@@ -28,6 +28,9 @@ test_current = 10e-3
 
 
 # Measure voltage (and current) with two test currents
+smu.enable_output( True )
+
+
 smu.set_drive_current( -test_current )
 time.sleep(0.25)
 v0 = smu.measure_voltage()
@@ -38,7 +41,7 @@ time.sleep(0.25)
 v1 = smu.measure_voltage()
 i1 = smu.measure_current()
 
-smu.set_drive_voltage( 0 )
+smu.enable_output( False )
 
 
 # Compute resistance

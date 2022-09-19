@@ -49,6 +49,7 @@ Imeas = []
 
 
 # Perform measurements
+smu.enable_output( True )
 
 for vset in v_points:
     smu.set_drive_voltage( vset )
@@ -57,7 +58,7 @@ for vset in v_points:
     Vmeas.append( vset )
     Imeas.append( i_meas )
 
-smu.set_drive_voltage( 0 )
+smu.enable_output( False )
 
 
 # Diode model
