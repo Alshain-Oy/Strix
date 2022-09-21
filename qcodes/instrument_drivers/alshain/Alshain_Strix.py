@@ -61,6 +61,7 @@ class AlshainStrix( Instrument ):
             get_cmd=self._get_output,
             set_cmd=self._set_output,
             instrument=self,
+            vals=vals.Bool(),
             docstring="Output enable",
         )
 
@@ -69,6 +70,7 @@ class AlshainStrix( Instrument ):
             get_cmd=self._get_averaging,
             set_cmd=self._set_averaging,
             instrument=self,
+            vals=vals.Ints(min_value=1, max_value=100),
             docstring="Number of averages per measurement",
         )
 
@@ -76,8 +78,9 @@ class AlshainStrix( Instrument ):
             "autoranging",
             get_cmd=self._get_autoranging,
             set_cmd=self._set_autoranging,
+            vals=vals.Bool(),
             instrument=self,
-            docstring="Autoranging mode (autoranging or fixed gain)",
+            docstring="Autoranging enabled",
         )
 
         self.voltage_fixed_gain = Parameter(
@@ -89,13 +92,13 @@ class AlshainStrix( Instrument ):
             docstring="Fixed gain for voltage measurement, 1 = 17V, 8 = 2.5V, 64 = 300mV",
         )
         
-        self.current_fixed_gain = Parameter(
-            "current_fixed_gain",
-            get_cmd=self._get_current_fixed_gain,
-            set_cmd=self._set_current_fixed_gain,
+        self.current_fixed_range = Parameter(
+            "current_fixed_range",
+            get_cmd=self._get_current_fixed_range,
+            set_cmd=self._set_current_fixed_range,
             vals = vals.Enum(1, 2, 3, 4),
             instrument=self,
-            docstring="Fixed gain for current measurement, 1 = 17mA, 2 = 100uA, 3 = 1uA, 4 = 10nA",
+            docstring="Fixed range for current measurement, 1 = 17mA, 2 = 100uA, 3 = 1uA, 4 = 10nA",
         )
         
         self.ext_voltage_fixed_gain = Parameter(
@@ -111,6 +114,7 @@ class AlshainStrix( Instrument ):
             "heater_mode",
             get_cmd=self._get_heater_mode,
             set_cmd=self._set_heater_mode,
+            vals=vals.Bool(),
             instrument=self,
             docstring="Internal heater control -> enabled or not",
         )
@@ -119,6 +123,7 @@ class AlshainStrix( Instrument ):
             "heater_state",
             get_cmd=self._get_heater_state,
             set_cmd=self._set_heater_state,
+            vals=vals.Bool(),
             instrument=self,
             docstring="Current internal heater state (heating or not)",
         )
@@ -127,7 +132,7 @@ class AlshainStrix( Instrument ):
             "temperature_adc",
             get_cmd=self._get_temperature_adc,
             set_cmd=self._set_temperature,
-            unit = "deg",
+            unit = "degC",
             label = "Temperature",
             docstring="Temperature of the ADC",
 
@@ -137,7 +142,7 @@ class AlshainStrix( Instrument ):
             "temperature_drive",
             get_cmd=self._get_temperature_drive,
             set_cmd=self._set_temperature,
-            unit = "deg",
+            unit = "degC",
             label = "Temperature",
             docstring="Temperature of the drive circuitry",
 
@@ -149,6 +154,7 @@ class AlshainStrix( Instrument ):
             get_cmd=self._get_compliance_voltage,
             set_cmd=self._set_compliance_voltage,
             label="Compliance voltage",
+            vals=vals.Numbers(min_value=-21.5, max_value=21.5),
             docstring="Compliance voltage limit",
         )
 
@@ -158,6 +164,7 @@ class AlshainStrix( Instrument ):
             get_cmd=self._get_compliance_current,
             set_cmd=self._set_compliance_current,
             label="Compliance current",
+            vals=vals.Numbers(min_value=-21.5, max_value=21.5),
             docstring="Compliance current limit",
         )
 
@@ -165,6 +172,7 @@ class AlshainStrix( Instrument ):
             "fourwire_mode",
             get_cmd=self._get_fourwire_mode,
             set_cmd=self._set_fourwire_mode,
+            vals=vals.Bool(),
             docstring="Is four-wire mode enabled",
         )
 
@@ -221,10 +229,10 @@ class AlshainStrix( Instrument ):
     def _get_voltage_fixed_gain( self ):
         return self._smu.read( libStrix.PARAM_ADC_VOLTAGE_GAIN )
     
-    def _set_current_fixed_gain( self, value ):
+    def _set_current_fixed_range( self, value ):
         self._smu.write( libStrix.PARAM_LARGE_CURRENT_GAIN, value )
     
-    def _get_current_fixed_gain( self ):
+    def _get_current_fixed_range( self ):
         return self._smu.read( libStrix.PARAM_LARGE_CURRENT_GAIN )
     
     def _set_ext_fixed_gain( self, value ):
@@ -247,7 +255,7 @@ class AlshainStrix( Instrument ):
             return False
     
     def _get_heater_state( self ):
-        return self._smu.read( libStrix.PARAM_HEATER_STATE )
+        return self._smu.read( libStrix.PARAM_HEATER_STATE ) == 1
 
     def _set_heater_state( self, value ):
         pass
